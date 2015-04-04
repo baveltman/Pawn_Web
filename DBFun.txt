@@ -1,0 +1,26 @@
+DBFun
+----------
+
+//make sure the path is added to .bash_profile file export PATH="/usr/local/mysql/bin:$PATH"
+
+1. access server from command line
+mysql -u root -pyourpasswordhere
+
+2. reset pass for mysql server
+mysqladmin -u root password 'yourpasswordhere'
+
+3. get version of mysql
+mysql -v
+
+4. quit while in mysql
+\q
+
+5. CREATE DATABASE dbname;
+
+6. USE dbname;
+
+7. SHOW DATABASES;
+
+8. SHOW TABLES;
+
+9.
