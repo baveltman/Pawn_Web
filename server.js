@@ -14,6 +14,9 @@ var connection = mysql.createConnection({ // Mysql Connection
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json()); // Body parser use JSON data
 
+/**
+* /users/ endpoints
+*/
 
 // GET /users/{facebookId}
 app.get('/users/:facebookId', function(req, res) {
@@ -53,6 +56,7 @@ app.get('/users/:facebookId', function(req, res) {
     }
 });
 
+//have the server listen locally at port
 var server = app.listen(3000, function () {
 
 
