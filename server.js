@@ -8,14 +8,12 @@ app.use(bodyParser.json()); // Body parser use JSON data
 //include routes
 require('./routes')(app);
 
-// sets port 3000 to default or unless otherwise specified in the environment
-app.set('port', process.env.PORT || 3000);
+//set default port and ip address
+var ipaddress = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
+var port = process.env.OPENSHIFT_NODEJS_PORT || 3000;
 
-
-// //have the server listen locally at port
-var server = app.listen(app.get('port'), function () {
-
-
+app.listen(port, ipaddress, function() {
+    // Do your stuff
 });
 
 //temporary index

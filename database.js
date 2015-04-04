@@ -5,9 +5,9 @@ var currentConnection = null;
 module.exports.getConnection = function(){
 	if (!currentConnection){
 		var connection = mysql.createConnection({ // Mysql Connection
-		    host : 'localhost',
-		    user : 'root',
-		    password : 'barkbark69',
+		    host : process.env.OPENSHIFT_MYSQL_DB_HOST || 'localhost',
+		    user : process.env.OPENSHIFT_MYSQL_DB_USERNAME || 'root',
+		    password : process.env.OPENSHIFT_MYSQL_DB_PASSWORD || 'barkbark69',
 		    database : 'dogpark',
 		});
 
