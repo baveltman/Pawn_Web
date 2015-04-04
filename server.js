@@ -3,7 +3,9 @@ var app = require('express')(); // Express App include
 var http = require('http').Server(app); // http server
 var mysql = require('mysql'); // Mysql include
 var bodyParser = require("body-parser"); // Body parser for fetch posted data
-var User = require('./User.js');
+
+//import models
+var User = require('./models/User.js');
 
 var connection = mysql.createConnection({ // Mysql Connection
     host : 'localhost',
