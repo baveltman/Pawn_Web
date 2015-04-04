@@ -1,31 +1,18 @@
-
-var app = require('express')(); // Express App include
-var http = require('http').Server(app); // http server
-var mysql = require('mysql'); // Mysql include
-var bodyParser = require("body-parser"); // Body parser for fetch posted data
-
-//import models
-var User = require('./models/User.js');
-
-var connection = mysql.createConnection({ // Mysql Connection
-    host : 'localhost',
-    user : 'root',
-    password : 'barkbark69',
-    database : 'dogpark',
-});
-
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json()); // Body parser use JSON data
-
 /**
 * /users/ endpoints
 */
 
+//import models
+var User = require('../models/User.js');
+
+//get db connection
+var db = require('../database.js');
+var connection = db.getConnection();
+
 // GET /users/{facebookId}
 // returns record of user with facebookId
-app.get('/users/:facebookId', function(req, res) {
-  
-	//ensure id was properly passed
+exports.findById = function(req, res){
+  //ensure id was properly passed
 	if(!req.params.facebookId  || +req.params.facebookId < 0) {
 		res.statusCode = 404;
 		return res.send('Error 404: no user found');
@@ -58,12 +45,12 @@ app.get('/users/:facebookId', function(req, res) {
         data["user"] = "Please provide userid to retrieve data";
         res.json(data);
     }
-});
+};
 
-// POST /users/
+
+//POST /users/
 // creates new user
-app.post('/users/', function(req, res) {
-
+exports.add = function(req, res){
 	var user = new User(req);
   
 	//ensure id was properly passed
@@ -97,10 +84,7 @@ app.post('/users/', function(req, res) {
         data["user"] = "Something went wrong creating this user";
         res.json(data);
     }
-});
-
-//have the server listen locally at port
-var server = app.listen(3000, function () {
+};
 
 
-});
+
