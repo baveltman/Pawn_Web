@@ -4,9 +4,9 @@ CREATE TABLE users
 		facebookId INT UNSIGNED, 
 		email VARCHAR(200) NOT NULL,
 		birthdate DATE,
-		gender BIT,
+		gender INT,
 		description VARCHAR (1000),
-		active BIT NOT NULL,
+		active BOOL NOT NULL,
 		
 		UNIQUE (email),
 		PRIMARY KEY(id, facebookId)
@@ -29,7 +29,7 @@ CREATE TABLE placeHours
 		openTime TIME NOT NULL,
 		closeTime TIME NOT NULL,
 
-		INDEX placeId_ind (hoursId),
+		INDEX placeId_ind (placeId),
 
 		FOREIGN KEY (placeId) 
         	REFERENCES places(id),

@@ -16,10 +16,10 @@ app.use(bodyParser.json()); // Body parser use JSON data
 
 
 // GET /users/{facebookId}
-app.get('/quote/:facebookId', function(req, res) {
+app.get('/users/:facebookId', function(req, res) {
   
 	//ensure id was properly passed
-	if(!id || req.params.facebookId < 0) {
+	if(!req.params.facebookId  || +req.params.facebookId < 0) {
 		res.statusCode = 404;
 		return res.send('Error 404: no user found');
 	}  
@@ -35,14 +35,14 @@ app.get('/quote/:facebookId', function(req, res) {
     
     if(!!id){
     	//query for return
-        connection.query("SELECT * FROM users WHERE facebookId=?",[Id],function(err, rows, fields){
+        connection.query("SELECT * FROM users WHERE facebookId=?",[id],function(err, rows, fields){
             if(!!err){
             	//handle error
                 data["user"] = "Error getting user data";
             }else{
             	//return data successfully
                 data["error"] = 0;
-                data["user"] = rows;
+                data["user"] = rows[0];
             }
             res.json(data);
         });
@@ -51,4 +51,9 @@ app.get('/quote/:facebookId', function(req, res) {
         data["user"] = "Please provide userid to retrieve data";
         res.json(data);
     }
+});
+
+var server = app.listen(3000, function () {
+
+
 });
