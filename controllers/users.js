@@ -77,6 +77,7 @@ exports.add = function(req, res){
             	//return data successfully
             	res.statusCode = 200;
                 data["error"] = 0;
+                user.active = 1;
                 data["user"] = user;
             }
             res.json(data);
