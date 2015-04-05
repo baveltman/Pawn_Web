@@ -24,7 +24,8 @@ exports.findById = function(req, res){
 	//initialize return object
 	var data = {
         "error":1,
-        "user":""
+        "user":"",
+        "message": ""
     };
     
     if(!!id){
@@ -32,7 +33,7 @@ exports.findById = function(req, res){
         connection.query("SELECT * FROM users WHERE facebookId=?",[id],function(err, rows, fields){
             if(!!err){
             	//handle error
-                data["user"] = "Error getting user data";
+                data["message"] = "Error getting user data";
             }else{
             	//return data successfully
                 data["error"] = 0;
@@ -42,7 +43,7 @@ exports.findById = function(req, res){
         });
     }else{
     	//handle error
-        data["user"] = "Please provide userid to retrieve data";
+        data["message"] = "Please provide userid to retrieve data";
         res.json(data);
     }
 };
@@ -62,7 +63,8 @@ exports.add = function(req, res){
 	//initialize return object
 	var data = {
         "error":1,
-        "user":""
+        "user":"",
+        "message": ""
     };
     
     if(!!user){
@@ -70,7 +72,7 @@ exports.add = function(req, res){
         connection.query("insert into users (facebookId,email,birthdate,gender,description,active) values (?,?,?, ?, ?, ?);",[user.facebookId, user.email, user.birthdate, user.gender, user.description, 1],function(err, rows, fields){
             if(!!err){
             	//handle error
-                data["errorMessage"] = err;
+                data["message"] = err;
             }else{
             	//return data successfully
             	res.statusCode = 200;
@@ -81,7 +83,7 @@ exports.add = function(req, res){
         });
     }else{
     	//handle error
-        data["user"] = "Something went wrong creating this user";
+        data["message"] = "Something went wrong creating this user";
         res.json(data);
     }
 };
