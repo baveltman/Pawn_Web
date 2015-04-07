@@ -1,29 +1,36 @@
 CREATE TABLE users 
 	(
-		id INT UNSIGNED NOT NULL AUTO_INCREMENT,
-		facebookId INT UNSIGNED, 
-		email VARCHAR(200) NOT NULL,
-		birthdate DATE,
-		gender INT,
-		description VARCHAR (1000),
-		active BOOL NOT NULL,
-		
+		_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+		id INT UNSIGNED NOT NULL,
+		active INT UNSIGNED NOT NULL,
+		first_name VARCHAR(200),
+		email VARCHAR(500) NOT NULL,
+		timezone INT,
+		name VARCHAR (400),
+		locale VARCHAR(10),
+    	last_name VARCHAR(200),
+		gender VARCHAR(6),
+		description VARCHAR(1000),
+
+		PRIMARY KEY(_id),
+		UNIQUE (id),
 		UNIQUE (email),
-		PRIMARY KEY(id, facebookId)
+
+		INDEX userId_ind (id)
 
 	);
 
 CREATE TABLE places
 	(
-		id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+		_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
 		description VARCHAR (2000),
-		PRIMARY KEY(id)
+		PRIMARY KEY(_id)
 
 	); 
 
 CREATE TABLE placeHours
 	(
-		id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+		_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
 		placeId INT UNSIGNED NOT NULL,
 		dayOfWeek INT UNSIGNED NOT NULL,
 		openTime TIME NOT NULL,
@@ -32,15 +39,15 @@ CREATE TABLE placeHours
 		INDEX placeId_ind (placeId),
 
 		FOREIGN KEY (placeId) 
-        	REFERENCES places(id),
+        	REFERENCES places(_id),
 
-		PRIMARY KEY(id)
+		PRIMARY KEY(_id)
 
 	); 
 
 CREATE TABLE dogs
 	(
-		id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+		_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
 		userId INT UNSIGNED, 
 		breed VARCHAR(100),
 		description VARCHAR (2000),
@@ -54,13 +61,13 @@ CREATE TABLE dogs
 		FOREIGN KEY (userId) 
         	REFERENCES users(id),
 
-		PRIMARY KEY(id)
+		PRIMARY KEY(_id)
 
 	); 
 
 CREATE TABLE checkins 
 	(
-		id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+		_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
 		userId INT UNSIGNED, 
 		placeId INT UNSIGNED,
 		lat DECIMAL NOT NULL,
@@ -73,6 +80,6 @@ CREATE TABLE checkins
 		FOREIGN KEY (userId) 
         	REFERENCES users(id),
         FOREIGN KEY (placeId) 
-        	REFERENCES places(id),
-        PRIMARY KEY(id)
+        	REFERENCES places(_id),
+        PRIMARY KEY(_id)
 	);
