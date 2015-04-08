@@ -30,7 +30,7 @@ exports.findById = function(req, res){
     
     if(!!id){
     	//query for return
-        connection.query("SELECT * FROM users WHERE facebookId=?",[id],function(err, rows, fields){
+        connection.query("SELECT * FROM users WHERE id=?",[id],function(err, rows, fields){
             if(!!err){
             	//handle error
                 data["message"] = "Error getting user data";
@@ -69,7 +69,7 @@ exports.add = function(req, res){
     
     if(!!user){
     	//query for return
-        connection.query("insert into users (facebookId,email,birthdate,gender,description,active) values (?,?,?, ?, ?, ?);",[user.facebookId, user.email, user.birthdate, user.gender, user.description, 1],function(err, rows, fields){
+        connection.query("insert into users (id,active,first_name,email,timezone,name, locale, last_name, gender, description) values (?,?,?,?,?,?,?,?,?,?);",[user.id, 1, user.first_name, user.email, user.timezone, user.name, user.locale, user.last_name, user.gender, user.description],function(err, rows, fields){
             if(!!err){
             	//handle error
                 data["message"] = err;

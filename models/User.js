@@ -3,11 +3,16 @@
 */
 
 function User(req) {
-	this.facebookId = req.body.facebookId;
-	this.email = req.body.email;
-	this.birthdate = req.body.birthdate;
-	this.gender = req.body.gender;
-	this.description = req.body.description;
+	this.id = req.body.id;
+	this.active = req.body.active;
+    this.first_name = req.body.first_name;
+    this.email = req.body.email;
+    this.timezone = req.body.timezone;
+    this.name = req.body.name;
+    this.locale = req.body.locale;
+    this.last_name = req.body.last_name;
+    this.gender = req.body.gender;
+    this.description = req.body.description;
 }
 
 User.prototype.isValid = function() {
@@ -17,7 +22,7 @@ User.prototype.isValid = function() {
 		isEmailValid = this.isEmailValid(this.email);
 	}
 
-	return (+this.facebookId > 0) && isEmailValid;
+	return (+this.id > 0) && isEmailValid;
 };
 
 User.prototype.isEmailValid = function(email) {
