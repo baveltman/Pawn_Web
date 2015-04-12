@@ -9,8 +9,8 @@ var Dog = require('../models/dog.js');
 var db = require('../database.js');
 var connection = db.getConnection();
 
-// GET /dogs/{facebookId}
-// returns record of user with facebookId
+// GET /dogs/{userId}
+// returns record of user with userId
 exports.findByUserId = function(req, res){
   //ensure id was properly passed
 	if(!req.params.userId  || +req.params.userId < 0) {
