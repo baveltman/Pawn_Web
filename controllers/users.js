@@ -89,5 +89,48 @@ exports.add = function(req, res){
     }
 };
 
+//PUT /users/
+//updates user with specified Id
+exports.updateUser = function(req, res){
+	var user = new User(req);
+  
+	//ensure id was properly passed
+	if(!user.isValid()) {
+		res.statusCode = 404;
+		return res.send('Error 404: cannot update user. facebookId or email field is not valid');
+	}  
+	
+	//initialize return object
+	var data = {
+        "error":1,
+        "user":"",
+        "message": ""
+    };
+
+
+    if(!!user){
+    	//query for return
+        connection.query("update users set first_name = ?, email = ?, timezone = ?, name = ?, locale = ?, last_name = ?, gender = ?, description = ? where id = ?;",[user.first_name, user.email, user.timezone, user.name, user.locale, user.last_name, user.gender, user.description, user.id],function(err, rows, fields){
+            if(!!err){
+            	//handle error
+                data["message"] = err;
+            }else{
+            	//return data successfully
+            	res.statusCode = 200;
+                data["error"] = 0;
+                user.active = 1;
+                data["user"] = user;
+            }
+            res.json(data);
+        });
+    }else{
+    	//handle error
+        data["message"] = "Something went wrong updating this user";
+        res.json(data);
+    }
+
+
+};
+
 
 
