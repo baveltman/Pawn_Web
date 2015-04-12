@@ -5,4 +5,9 @@ module.exports = function(app, connection){
     app.post('/users', users.add);
     app.put('/users', users.updateUser);
 
+    var dogs = require('./controllers/dogs.js');
+    app.get('/dogs/:facebookId', dogs.findByUserId);
+    app.post('/dogs', dogs.add);
+    app.put('/dogs', dogs.updateDog);
+
 }
