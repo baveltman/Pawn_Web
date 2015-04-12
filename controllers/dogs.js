@@ -90,7 +90,7 @@ exports.add = function(req, res){
 
 //PUT /dogs/
 //updates dog with specified userId
-exports.updateUser = function(req, res){
+exports.updateDog = function(req, res){
 	var dog = new Dog(req);
   
 	//ensure id was properly passed
