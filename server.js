@@ -10,8 +10,6 @@ var path = require('path');
 var logger = require('morgan');
 app.use(logger('dev'));
 
-var bcrypt = require('bcrypt');
-
 app.all('/*', function(req, res, next) {
   // CORS headers
   res.header("Access-Control-Allow-Origin", "*"); // restrict it to the required domain

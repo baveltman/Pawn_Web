@@ -10,8 +10,7 @@ var db = require('../database.js');
 var connection = db.getConnection();
 
 //get encryption module
-var bcrypt = require('bcrypt');
-var salt = 10;
+var bcrypt = require('bcrypt-nodejs');
 
 // GET /users/{facebookId}
 // returns record of user with facebookId
@@ -91,7 +90,7 @@ exports.create = function(req, res){
         "message": ""
     };
 
-    var hashedPassword = bcrypt.hashSync(user.password, salt);
+    var hashedPassword = bcrypt.hashSync(user.password);
     
     if(!!user){
     	//query for return
