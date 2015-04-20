@@ -1,24 +1,53 @@
 
 var app = require('express')(); // Express App include
 var http = require('http').Server(app); // http server
+
 var bodyParser = require("body-parser"); // Body parser for fetch posted data
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json()); // Body parser use JSON data
 
-//include routes
-require('./routes')(app);
+var path = require('path');
+var logger = require('morgan');
+app.use(logger('dev'));
+
+var bcrypt = require('bcrypt');
+
+app.all('/*', function(req, res, next) {
+  // CORS headers
+  res.header("Access-Control-Allow-Origin", "*"); // restrict it to the required domain
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+  // Set custom headers for CORS
+  res.header('Access-Control-Allow-Headers', 'Content-type,Accept,X-Access-Token,X-Key');
+  if (req.method == 'OPTIONS') {
+    res.status(200).end();
+  } else {
+    next();
+  }
+});
+ 
+// Auth Middleware - This will check if the token is valid
+// Only the requests that start with /api/v1/* will be checked for the token.
+// Any URL's that do not follow the below pattern should be avoided unless you 
+// are sure that authentication is not needed
+app.all('/api/v1/*', [require('./middlewares/validateRequest')]);
+ 
+app.use('/', require('./routes'));
+ 
+// If no route is matched by now, it must be a 404
+app.use(function(req, res, next) {
+  var err = new Error('Not Found');
+  err.status = 404;
+  next(err);
+});
+
 
 //set default port and ip address
 var ipaddress = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
 var port = process.env.OPENSHIFT_NODEJS_PORT || 3000;
 
-app.listen(port, ipaddress, function() {
-    // Do your stuff
+var server = app.listen(port, ipaddress, function() {
+    console.log('Express server listening on port ' + server.address().port);
 });
 
-//temporary index
-app.get('/', function(req, res){
-    res.send('welcome to dog park'); 
-});
 
 
