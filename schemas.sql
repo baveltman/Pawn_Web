@@ -8,6 +8,6 @@ CREATE TABLE users
 		password VARCHAR(200) NOT NULL,
 
 		PRIMARY KEY(_id),
-		UNIQUE (email),
+		UNIQUE (email)
 
 	);
