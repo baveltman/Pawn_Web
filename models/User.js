@@ -15,5 +15,9 @@ User.prototype.isEmailValid = function() {
     return re.test(this.email);
 }
 
+User.prototype.isPasswordValid = function() {
+    return this.password && this.password.length >= 6;
+}
+
 
 module.exports = User;

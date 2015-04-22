@@ -63,14 +63,9 @@ exports.create = function(req, res){
 		return res.send('Error 404: cannot create user. Email field is not valid');
 	}
 
-	if (!user.phone){
+	if (!user.isPasswordValid()){
 		res.statusCode = 404;
-		return res.send('Error 404: cannot create user. Phone field is not valid');
-	} 
-
-	if (!user.password){
-		res.statusCode = 404;
-		return res.send('Error 404: cannot create user. Password field is not valid');
+		return res.send('Error 404: cannot create user. Password must be at least 6 characters');
 	} 
 
 	if (!user.first_name){
