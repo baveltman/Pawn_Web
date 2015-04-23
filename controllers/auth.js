@@ -14,6 +14,9 @@ var bcrypt = require('bcrypt-nodejs');
 
 //get token module
 var jwt = require('jwt-simple');
+
+//get date module
+var moment = require('moment');
  
 var auth = {
  
@@ -37,46 +40,36 @@ var auth = {
       });
       return;
     }
+
+    connection.query("select * from users where email = ?;",[user.email],function(err, rows, fields){
+        if(!!err){
+          //handle error
+          res.status(401);
+          res.json({
+            "status": 401,
+            "message": "Invalid credentials"
+          });
+          return;
+        }else{
+          var returnedUser = rows[0];
+          if (returnedUser){
+             var hashedPassword = returnedUser.password;
+             var passwordsMatch = bcrypt.compareSync(user.password, hashedPassword);
+             if (passwordsMatch){
+                res.status(200);
+                res.json(genToken(returnedUser));
+             }
+          }
+          //no user found
+          res.status(401);
+          res.json({
+            "status": 401,
+            "message": "Invalid credentials"
+          });
+          return;
+        }
+    });
  
-    // Fire a query to your DB and check if the credentials are valid
-    var dbUserObj = auth.validate(user.email, user.password);
-   
-    if (!dbUserObj) { // If authentication fails, we send a 401 back
-      res.status(401);
-      res.json({
-        "status": 401,
-        "message": "Invalid credentials"
-      });
-      return;
-    }
- 
-    if (dbUserObj) {
- 
-      // If authentication is success, we will generate a token
-      // and dispatch it to the client
-      res.status(200);
-      res.json(genToken(dbUserObj));
-    }
- 
-  },
- 
-  validate: function(email, password) {
-      connection.query("select * from users where email = ?;",[email],function(err, rows, fields){
-            if(!!err){
-              //handle error
-              return null;
-            }else{
-              var returnedUser = rows[0];
-              if (returnedUser){
-                 var hashedPassword = returnedUser.password;
-                 var passwordsMatch = bcrypt.compareSync(password, hashedPassword);
-                 if (passwordsMatch){
-                    return returnedUser;
-                 }
-              }
-              return null;
-            }
-        });
   },
  
   validateUser: function(email) {
@@ -93,7 +86,7 @@ var auth = {
  
 // private method
 function genToken(user) {
-  var expires = expiresIn(7); // 7 days
+  var expires = moment().add(10, 'days').format();
   var token = jwt.encode({
     exp: expires
   }, require('../config/secret')());
@@ -110,10 +103,5 @@ function genToken(user) {
     user: user
   };
 }
- 
-function expiresIn(numDays) {
-  var dateObj = new Date();
-  return dateObj.setDate(dateObj.getDate() + numDays);
-}
- 
+  
 module.exports = auth;
