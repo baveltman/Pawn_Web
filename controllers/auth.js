@@ -57,17 +57,28 @@ var auth = {
              var passwordsMatch = bcrypt.compareSync(user.password, hashedPassword);
              if (passwordsMatch){
                 res.status(200);
-                res.json(auth.genToken(returnedUser));
+                var responseWithToken = auth.genToken(returnedUser);
+                //save token to DB
+                connection.query("insert into loginTokens (token, expirationDate, email) values (?,?,?);",[responseWithToken.token, responseWithToken.expires, user.email],function(err, rows, fields){
+                    if(!!err){
+                      res.json(responseWithToken);
+                    } else {
+                      res.json(responseWithToken);
+                    }
+                    
+                }); 
+                
              }
-          }
-          //no user found
-          res.status(401);
-          res.json({
-            "status": 401,
-            "message": "Invalid credentials"
-          });
-          return;
-        }
+          } else {
+            //no user found
+            res.status(401);
+            res.json({
+              "status": 401,
+              "message": "Invalid credentials"
+            });
+            return;
+          }    
+      }
     });
  
   },
@@ -84,14 +95,11 @@ var auth = {
   },
 
   genToken: function(user) {
-    var expires = moment().add(10, 'days').format();
+    var expires = moment().add(10, 'days').format("YYYY-MM-DD HH:MM:SS");
     var token = jwt.encode({
       exp: expires
     }, require('../config/secret')());
 
-    //save token to DB
-    connection.query("insert into loginTokens (token, expirationDate) values (?,?);",[token, expires],function(err, rows, fields){ });
-   
     user.password = "";
 
     //return succesful response

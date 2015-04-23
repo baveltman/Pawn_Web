@@ -97,12 +97,18 @@ exports.create = function(req, res){
                 data["message"] = err;
             }else{
             	//return data successfully
-            	res.statusCode = 200;
-                data["error"] = 0;
-                user.password = '';
-                res.json(auth.genToken(user));
+            	res.status(200);
+                var responseWithToken = auth.genToken(user);
+                //save token to DB
+                connection.query("insert into loginTokens (token, expirationDate, email) values (?,?,?);",[responseWithToken.token, responseWithToken.expires, user.email],function(err, rows, fields){
+                    if(!!err){
+						res.json(responseWithToken);
+                    } else {
+                    	res.json(responseWithToken);
+                    }
+                    
+                }); 
             }
-            res.json(data);
         });
     }else{
     	//handle error
