@@ -57,7 +57,7 @@ var auth = {
              var passwordsMatch = bcrypt.compareSync(user.password, hashedPassword);
              if (passwordsMatch){
                 res.status(200);
-                res.json(genToken(returnedUser));
+                res.json(auth.genToken(returnedUser));
              }
           }
           //no user found
@@ -82,26 +82,25 @@ var auth = {
             }
         });
   },
-}
- 
-// private method
-function genToken(user) {
-  var expires = moment().add(10, 'days').format();
-  var token = jwt.encode({
-    exp: expires
-  }, require('../config/secret')());
 
-  //save token to DB
-  connection.query("insert into loginTokens (token, expirationDate) values (?,?);",[token, expires],function(err, rows, fields){ });
- 
-  user.password = "";
+  genToken: function(user) {
+    var expires = moment().add(10, 'days').format();
+    var token = jwt.encode({
+      exp: expires
+    }, require('../config/secret')());
 
-  //return succesful response
-  return {
-    token: token,
-    expires: expires,
-    user: user
-  };
+    //save token to DB
+    connection.query("insert into loginTokens (token, expirationDate) values (?,?);",[token, expires],function(err, rows, fields){ });
+   
+    user.password = "";
+
+    //return succesful response
+    return {
+      token: token,
+      expires: expires,
+      user: user
+    };
+  },
 }
-  
+   
 module.exports = auth;
