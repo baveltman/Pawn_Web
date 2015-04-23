@@ -11,3 +11,19 @@ CREATE TABLE users
 		UNIQUE (email)
 
 	);
+
+CREATE TABLE loginTokens 
+	(
+		_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+		token VARCHAR(200),
+		expirationDate DATE,
+		userId INT UNSIGNED NOT NULL,
+
+		PRIMARY KEY(_id),
+
+		INDEX userId_ind (userId),
+    	FOREIGN KEY (userId) 
+        	REFERENCES users(_id)
+
+	);
+
