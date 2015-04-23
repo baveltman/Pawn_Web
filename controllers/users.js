@@ -12,6 +12,8 @@ var connection = db.getConnection();
 //get encryption module
 var bcrypt = require('bcrypt-nodejs');
 
+var auth = require('./auth.js');
+
 // GET /users/{facebookId}
 // returns record of user with facebookId
 // exports.findById = function(req, res){
@@ -98,7 +100,7 @@ exports.create = function(req, res){
             	res.statusCode = 200;
                 data["error"] = 0;
                 user.password = '';
-                data["user"] = user;
+                res.json(auth.genToken(user));
             }
             res.json(data);
         });
