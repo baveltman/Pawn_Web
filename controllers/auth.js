@@ -13,7 +13,7 @@ var connection = db.getConnection();
 var bcrypt = require('bcrypt-nodejs');
 
 //get token module
-var jwt = require('jwt-simple');
+var randtoken = require('rand-token');
 
 //get date module
 var moment = require('moment');
@@ -95,10 +95,8 @@ var auth = {
   },
 
   genToken: function(user) {
-    var expires = moment().add(10, 'days').format("YYYY-MM-DD HH:MM:SS");
-    var token = jwt.encode({
-      exp: expires
-    }, require('../config/secret')());
+    var expires = moment().utc().add(3, 'days').format("YYYY-MM-DD HH:mm:ss");
+    var token = randtoken.generate(16);
 
     user.password = "";
 
